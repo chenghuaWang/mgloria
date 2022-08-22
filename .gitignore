@@ -1,0 +1,8 @@
+build/
+.vscode/
+.idea/
+build-debug/
+build-release/
+bin/
+tmp/
+.cache/
