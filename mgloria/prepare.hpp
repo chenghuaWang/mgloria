@@ -29,6 +29,10 @@
 #define MGLORIA_USE_CUDA 1
 #endif
 
+#ifndef MGLORIA_USE_CUDNN
+#define MGLORIA_USE_CUDNN 0
+#endif
+
 #ifndef MGLORIA_USE_MKL
 #define MGLORIA_USE_MKL 1
 #endif
@@ -50,6 +54,9 @@
 #include <cublas_v2.h>
 #include <curand.h>
 #endif
+#if MGLORIA_USE_CUDNN
+// TODO include something.
+#endif
 
 // inline symbol for template code used in both gpu and cpu
 #ifdef MGLORIA_INLINE
@@ -63,6 +70,7 @@
 #endif
 // inline symbol for template code used just on cpu
 #define MGLORIA_INLINE_CPU MGLORIA_FORCE_INLINE
+#define MGLORIA_INLINE_NORMAL inline
 #endif
 
 // defined the const exp
