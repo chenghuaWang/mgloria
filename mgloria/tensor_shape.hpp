@@ -76,7 +76,7 @@ struct Shape {
     s << "[Shape](";
 #pragma unroll
     for (index_t i = 0; i < dims - 1; ++i) { s << std::to_string(_shape[i]) << ", "; }
-    s << std::to_string(_shape[dimensions_in_use]) << ")";
+    s << std::to_string(_shape[dimensions_in_use]) << ")\n";
     return s.str();
   }
 
@@ -188,7 +188,7 @@ MGLORIA_INLINE_NORMAL Shape<1> makeShape1d(index_t d_1) {
  *@param        d_2 the shape of dim 2
  *@return       Shape<2>
  */
-MGLORIA_INLINE_NORMAL Shape<2> makeShaped2d(index_t d_1, index_t d_2) {
+MGLORIA_INLINE_NORMAL Shape<2> makeShape2d(index_t d_1, index_t d_2) {
   Shape<2> ans;
   ans[0] = d_1, ans[1] = d_2;
   return ans;
@@ -201,7 +201,7 @@ MGLORIA_INLINE_NORMAL Shape<2> makeShaped2d(index_t d_1, index_t d_2) {
  *@param        d_3 the shape of dim 3
  *@return       Shape<3>
  */
-MGLORIA_INLINE_NORMAL Shape<3> makeShaped3d(index_t d_1, index_t d_2, index_t d_3) {
+MGLORIA_INLINE_NORMAL Shape<3> makeShape3d(index_t d_1, index_t d_2, index_t d_3) {
   Shape<3> ans;
   ans[0] = d_1, ans[1] = d_2, ans[2] = d_3;
   return ans;
@@ -215,7 +215,7 @@ MGLORIA_INLINE_NORMAL Shape<3> makeShaped3d(index_t d_1, index_t d_2, index_t d_
  *@param        d_4 the shape of dim 4
  *@return       Shape<4>
  */
-MGLORIA_INLINE_NORMAL Shape<4> makeShaped4d(index_t d_1, index_t d_2, index_t d_3, index_t d_4) {
+MGLORIA_INLINE_NORMAL Shape<4> makeShape4d(index_t d_1, index_t d_2, index_t d_3, index_t d_4) {
   Shape<4> ans;
   ans[0] = d_1, ans[1] = d_2, ans[2] = d_3, ans[3] = d_4;
   return ans;
@@ -230,8 +230,8 @@ MGLORIA_INLINE_NORMAL Shape<4> makeShaped4d(index_t d_1, index_t d_2, index_t d_
  *@param        d_5 the shape of dim 5
  *@return       Shape<5>
  */
-MGLORIA_INLINE_NORMAL Shape<5> makeShaped5d(index_t d_1, index_t d_2, index_t d_3, index_t d_4,
-                                            index_t d_5) {
+MGLORIA_INLINE_NORMAL Shape<5> makeShape5d(index_t d_1, index_t d_2, index_t d_3, index_t d_4,
+                                           index_t d_5) {
   Shape<5> ans;
   ans[0] = d_1, ans[1] = d_2, ans[2] = d_3, ans[3] = d_4, ans[4] = d_5;
   return ans;
