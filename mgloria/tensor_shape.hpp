@@ -106,7 +106,7 @@ struct Shape {
 #endif
     index_t ans = 1;
 #pragma unroll
-    for (index_t i = start_dim; i < end_dim; ++i) { ans *= i; }
+    for (index_t i = start_dim; i < end_dim; ++i) { ans *= _shape[i]; }
     return ans;
   }
 
@@ -151,7 +151,7 @@ struct Shape {
     ans[1] = _shape[dimensions_in_use];
     int32_t tmp = 1;
 #pragma unroll
-    for (int32_t i = 1; i < dimensions_in_use; ++i) { tmp *= _shape[i]; }
+    for (int32_t i = 0; i < dimensions_in_use; ++i) { tmp *= _shape[i]; }
     ans[0] = tmp;
     return ans;
   }
@@ -164,7 +164,7 @@ struct Shape {
   MGLORIA_INLINE_NORMAL Shape<dimensions_in_use> CudaShape() const {
     Shape<dimensions_in_use> ans;
 #pragma unroll
-    for (index_t i = 0; i < dimensions_in_use; ++i) { ans[0] = _shape[i + 1]; }
+    for (index_t i = 0; i < dimensions_in_use; ++i) { ans[i] = _shape[i + 1]; }
     return ans;
   }
 };

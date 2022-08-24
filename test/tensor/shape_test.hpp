@@ -17,7 +17,7 @@ inline void __test_tensor_shape__() {
   LOG << "Flatten 2d " << shape5.Flatten2D().str();
   LOG << "CUDA Shape " << shape5.CudaShape().str();
   LOG << "Slice " << shape5.Slice<1, 2>().str();
-  LOG << "Size" << shape5.Size();
-  LOG << "Sub Size " << shape5.SubSize(1, 2);
+  LOG << "Size" << shape5.Size() << "\n";
+  LOG << "Sub Size " << shape5.SubSize(1, 2) << "\n";
   LOG << "-------- Successfully tested [Tensor][Shape] \n";
 }
