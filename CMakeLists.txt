@@ -135,8 +135,9 @@ endif()
 message(STATUS "CMAKE_CXX_COMPILER_VERSION: " ${CMAKE_CXX_COMPILER_VERSION})
 
 set(mgloria_head_dir ${PROJECT_SOURCE_DIR}/mgloria)
-set(mgloria_ps_head_dir ${PROJECT_SOURCE_DIR}/mgloria-ps)
+set(mgloria_ps_head_dir ${PROJECT_SOURCE_DIR}/mgloria_ps)
 
 
 add_subdirectory(mgloria)
+add_subdirectory(mgloria_ps)
 add_subdirectory(test)

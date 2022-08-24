@@ -27,7 +27,7 @@ enum class exprType : uint8_t {
 // ########################### Basic Template class define. ########################
 template<typename SubType, typename DataType, exprType EType>
 struct Expression {
-  MGLORIA_INLINE_NORMAL SubType* Self() { return static_cast<SubType*>(this); }
+  MGLORIA_INLINE_NORMAL SubType* SelfPtr() { return static_cast<SubType*>(this); }
   MGLORIA_INLINE_NORMAL const SubType& Self() const { return *static_cast<SubType*>(this); }
 };
 
@@ -35,14 +35,14 @@ template<typename LValue, typename RValue, typename DataType>
 struct ExpressionDispatcher;
 // ########################## Scalar Expression define. #############################
 template<typename DataType>
-struct ScaleExpr : public Expression<ScaleExpr<DataType>, DataType, exprType::Mapped> {
-  ScaleExpr(DataType s) : scale_value(s) {}
+struct ScalarExpr : public Expression<ScalarExpr<DataType>, DataType, exprType::Mapped> {
+  ScalarExpr(DataType s) : scale_value(s) {}
   DataType scale_value;
 };
 
 template<typename DataType>
-MGLORIA_INLINE_NORMAL ScaleExpr<DataType> scale(DataType s) {
-  return ScaleExpr<DataType>(s);
+MGLORIA_INLINE_NORMAL ScalarExpr<DataType> scale(DataType s) {
+  return ScalarExpr<DataType>(s);
 }
 
 // ########################## RValue Expression define. #############################

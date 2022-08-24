@@ -1,0 +1,4 @@
+#ifndef _MGLORIA_TENSOR_STREAM_HPP_
+#define _MGLORIA_TENSOR_STREAM_HPP_
+
+#endif

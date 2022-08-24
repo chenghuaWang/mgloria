@@ -3,7 +3,7 @@ Expression Template
 
 The `Expression Template` is actually a application of `Curiously Recurring Template Pattern(CRTP)`. And it is a kind of trick of cpp template programming. For example, if I want to calculate `int A = B + C + D`. I will first get the result of `tmp = B + C`, and then `tmp` will sum to `D` to get the final answer. But, it will become complex if `A, B, C` is tensor. The parameter `tmp` will use lots of memory if tensor is large or the compute graph is deep and large. Also, the separate calculating of `A + B + C` will bring more loops which make it time consuming.
 
-I assumed, all of the tensor I used bellow is $8 \times 8$
+I assumed, all of the tensor I used bellow is $8 \times 8$ or $8 \times 8 \times 8$
 
 ## The Naive way.
 
@@ -57,9 +57,9 @@ struct Tensor : public Exp {
         return (*this)[i, j, k];
     }
     Tensor operator=(const Exp& exp) {
-        for(int i = 0; i < 2; ++i) 
-            for(int j = 0; j < 3; ++j)
-                for(int k = 0; k < 4; ++k)
+        for(int i = 0; i < 8; ++i) 
+            for(int j = 0; j < 8; ++j)
+                for(int k = 0; k < 8; ++k)
                     (*this)[i, j, k] = exp.eval(i, j, k);
     }
 };
@@ -99,9 +99,9 @@ struct Tensor : public Exp<Tensor> {
 
     template<typename SubType>
     Tensor operator=(const Exp<SubType>& exp) {
-        for(int i = 0; i < 2; ++i) 
-            for(int j = 0; j < 3; ++j)
-                for(int k = 0; k < 4; ++k)
+        for(int i = 0; i < 8; ++i) 
+            for(int j = 0; j < 8; ++j)
+                for(int k = 0; k < 8; ++k)
                     (*this)[i, j, k] = exp.eval(i, j, k);
     }
 };

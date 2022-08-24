@@ -1,2 +1,2 @@
-project(mgloria-ps)
+project(mgloria_ps)
 include_directories(mgloria_head_dir)
