@@ -11,8 +11,6 @@
 #define _MGLORIA_TENSOR_SHAPE_HPP_
 #include <sstream>
 #include <string>
-#include "data_layout.hpp"
-#include "data_type.hpp"
 #include "depends.hpp"
 
 namespace mgloria {
