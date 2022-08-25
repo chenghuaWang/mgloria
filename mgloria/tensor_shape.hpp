@@ -40,7 +40,7 @@ struct Shape {
   MGLORIA_INLINE_NORMAL index_t& operator[](index_t i) {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
     CHECK_LOWER_THAN(i, dims);
-    CHECK_GREATER_THAN(i, 0);
+    CHECK_GREATER_EQUAL(i, 0);
 #endif
     return _shape[i];
   }
@@ -48,7 +48,7 @@ struct Shape {
   MGLORIA_INLINE_NORMAL const index_t& operator[](index_t i) const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
     CHECK_LOWER_THAN(i, dims);
-    CHECK_GREATER_THAN(i, 0);
+    CHECK_GREATER_EQUAL(i, 0);
 #endif
     return _shape[i];
   }
@@ -100,9 +100,9 @@ struct Shape {
   MGLORIA_INLINE_NORMAL index_t SubSize(index_t start_dim, index_t end_dim) const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
     CHECK_LOWER_THAN(start_dim, dims);
-    CHECK_GREATER_THAN(start_dim, 0);
+    CHECK_GREATER_EQUAL(start_dim, 0);
     CHECK_LOWER_THAN(end_dim, dims);
-    CHECK_GREATER_THAN(end_dim, 0);
+    CHECK_GREATER_EQUAL(end_dim, 0);
 #endif
     index_t ans = 1;
 #pragma unroll

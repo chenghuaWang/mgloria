@@ -134,7 +134,7 @@ class _log_stream {
  *@brief CHECK if the condition is True.
  */
 #define LOG_CHECK(x) \
-  if (!(x)) { LOG_ERR << "Check [" << #x << "] Fail.\n" }
+  if (!(x)) { LOG_ERR << "Check [" << #x << "] Fail.\n"; }
 #define CHECK_LOWER_THAN(x, y) LOG_CHECK((x) < (y))
 #define CHECK_GREATER_THAN(x, y) LOG_CHECK((x) > (y))
 #define CHECK_EQUAL(x, y) LOG_CHECK((x) == (y))
@@ -152,11 +152,12 @@ class _log_stream {
   {                                                                     \
     cudaError_t e = (func);                                             \
     if (e == cudaErrorCudartUnloading) { throw cudaGetErrorString(e); } \
-    LOG_CHECK(e == cudaSuccess) << "CUDA: " << cudaGetErrorString(e);   \
+    LOG_CHECK(e == cudaSuccess);                                        \
   }
 
 #endif  // MGLORIA_USE_CUDA == 1
 
 #define MGLORIA_ARRAY_BOUND_CHECK 0
+#define MGLORIA_PAD_TO_ALIGN 1
 
 #endif  // MGLORIA_PREPARE_HPP_

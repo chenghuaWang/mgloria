@@ -19,5 +19,7 @@ inline void __test_tensor_shape__() {
   LOG << "Slice " << shape5.Slice<1, 2>().str();
   LOG << "Size" << shape5.Size() << "\n";
   LOG << "Sub Size " << shape5.SubSize(1, 2) << "\n";
+  Tensor<CPU, 4, float> A(shape4);
+  LOG << "Test Tensor << overload\n" << A;
   LOG << "-------- Successfully tested [Tensor][Shape] \n";
 }

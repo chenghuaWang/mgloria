@@ -46,8 +46,8 @@ MGLORIA_INLINE_NORMAL ScalarExpr<DataType> scale(DataType s) {
 }
 
 // ########################## RValue Expression define. #############################
-template<typename TrueData, typename DataType>
-struct RValue : public Expression<TrueData, DataType, exprType::RValue> {};
+template<typename Container, typename DataType>
+struct RValueExpr : public Expression<Container, DataType, exprType::RValue> {};
 
 }  // namespace expr
 }  // namespace mgloria
