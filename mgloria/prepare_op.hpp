@@ -1,3 +1,9 @@
+/*!
+ *@author chenghua.wang
+ *@file   prepare_op.hpp
+ *@brief  The basic op that expression needed.
+ */
+
 #ifndef _MGLORIA_PREPARE_OP_H_
 #define _MGLORIA_PREPARE_OP_H_
 #include "prepare.hpp"

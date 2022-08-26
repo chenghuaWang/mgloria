@@ -65,7 +65,7 @@ struct Expression {
 /*!
  *@brief      The Expression Dispatcher, which respond to actually Eval the expressions.
  *@note       It's only a definition here, for RValueExpr to use. It's implementation is
- * in the expr_exe.hpp file.
+ * in the expr_eval.hpp file.
  *@tparam     LValue  the LValue should be a class inherited from expression.
  */
 template<typename LValue, typename RValue, typename DataType>
@@ -79,7 +79,7 @@ struct ExpressionDispatcher;
  *@tparam     DataType  the element datatype.
  *@note       This class is only an abstract of expression. And this file is only for abstract
  * different expressions. The Eval or to say execute of any operation is not in this file. You
- * can find how Transpose works in expr_exe.hpp. Each operation's implement is different, they
+ * can find how Transpose works in expr_eval.hpp. Each operation's implement is different, they
  * will be implemented in different files.
  *
  * This note will be appeared for only once. Other expression in this file is same logic.

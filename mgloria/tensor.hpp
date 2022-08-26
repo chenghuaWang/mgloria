@@ -411,6 +411,4 @@ class TensorT : public Tensor<Device, dims, DataType> {
 //          The implementation should in tensor_cpu.hpp and tensor_gpu.hpp .   #
 //##############################################################################
 
-#include "expr_eval.hpp"
-
 #endif

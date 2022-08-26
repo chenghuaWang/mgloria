@@ -4,5 +4,5 @@
 #if MGLORIA_USE_CUDA == 1
 #include "tensor_gpu.hpp"
 #endif
-
+#include "expr_eval.hpp"
 #endif
