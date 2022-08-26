@@ -11,11 +11,14 @@
 #ifndef MGLORIA_PREPARE_HPP
 #define MGLORIA_PREPARE_HPP
 
-#include <ostream>
 #if _MSC_VER > 1000
 #pragma once
 #error "Detected you are using MSVC to compile. MSVC is not support. Also, windows platform."
 #endif
+
+#ifdef __APPLE__
+#error "Detected you are using MacOS, Mac not support MKL and CUDA. Compile interrupt."
+#endif  // __APPLE__
 
 // include basic files.
 #include <cstdio>
@@ -24,6 +27,9 @@
 #include <climits>
 #include <sstream>
 #include <string>
+#include <limits>
+#include <cstdint>
+#include <ostream>
 
 // Flags for User to set.
 #ifndef MGLORIA_USE_CUDA
@@ -159,5 +165,74 @@ class _log_stream {
 
 #define MGLORIA_ARRAY_BOUND_CHECK 0
 #define MGLORIA_PAD_TO_ALIGN 1
+
+template<typename DataType>
+MGLORIA_INLINE_XPU DataType MINLimit();
+
+template<>
+MGLORIA_INLINE_XPU float MINLimit<float>() {
+  return std::numeric_limits<float>().min();
+}
+
+template<>
+MGLORIA_INLINE_XPU double MINLimit<double>() {
+  return std::numeric_limits<double>().min();
+}
+
+template<>
+MGLORIA_INLINE_XPU int32_t MINLimit<int32_t>() {
+  return std::numeric_limits<int32_t>().min();
+}
+
+template<>
+MGLORIA_INLINE_XPU int64_t MINLimit<int64_t>() {
+  return std::numeric_limits<int64_t>().min();
+}
+
+template<>
+MGLORIA_INLINE_XPU int8_t MINLimit<int8_t>() {
+  return std::numeric_limits<int8_t>().min();
+}
+
+template<>
+MGLORIA_INLINE_XPU uint8_t MINLimit<uint8_t>() {
+  return std::numeric_limits<uint8_t>().min();
+}
+
+template<typename DataType>
+MGLORIA_INLINE_XPU DataType MAXLimit();
+
+template<>
+MGLORIA_INLINE_XPU float MAXLimit<float>() {
+  return std::numeric_limits<float>().max();
+}
+
+template<>
+MGLORIA_INLINE_XPU double MAXLimit<double>() {
+  return std::numeric_limits<double>().max();
+}
+
+template<>
+MGLORIA_INLINE_XPU int32_t MAXLimit<int32_t>() {
+  return std::numeric_limits<int32_t>().max();
+}
+
+template<>
+MGLORIA_INLINE_XPU int64_t MAXLimit<int64_t>() {
+  return std::numeric_limits<int64_t>().max();
+}
+
+template<>
+MGLORIA_INLINE_XPU int8_t MAXLimit<int8_t>() {
+  return std::numeric_limits<int8_t>().max();
+}
+
+template<>
+MGLORIA_INLINE_XPU uint8_t MAXLimit<uint8_t>() {
+  return std::numeric_limits<uint8_t>().max();
+}
+
+#define MGLORIA_IS_NAN(func) std::isnan(func)
+#define MGLORIA_IS_INF(func) std::isinf(func)
 
 #endif  // MGLORIA_PREPARE_HPP_
