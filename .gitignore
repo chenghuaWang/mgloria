@@ -7,3 +7,4 @@ bin/
 tmp/
 .cache/
 script/git_push.sh
+.VSCodeCounter/
