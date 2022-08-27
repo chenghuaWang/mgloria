@@ -7,7 +7,7 @@
 
 #ifndef _MGLORIA_TENSOR_STREAM_HPP_
 #define _MGLORIA_TENSOR_STREAM_HPP_
-
+#pragma once
 #include "depends.hpp"
 
 namespace mgloria {
@@ -52,6 +52,12 @@ struct Stream {
   MGLORIA_INLINE_NORMAL bool IsIdle() { return true; }
   MGLORIA_INLINE_NORMAL void CreateBlasHandle() {}
 };
+
+template<typename device>
+MGLORIA_INLINE_NORMAL void FreeStream(Stream<device>* stream);
+
+template<typename device>
+MGLORIA_INLINE_NORMAL Stream<device>* NewStream(index_t devIdx);
 
 }  // namespace mgloria
 

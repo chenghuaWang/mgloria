@@ -15,8 +15,9 @@
  */
 #ifndef _MGLORIA_EXPRESSION_HPP
 #define _MGLORIA_EXPRESSION_HPP
-
+#pragma once
 #include "depends.hpp"
+#include "prepare_op.hpp"
 
 namespace mgloria {
 /*!
@@ -252,34 +253,34 @@ MGLORIA_INLINE_NORMAL BinaryExpr<OP, A_T, B_T, DataType, A_EType | B_EType | Map
 };
 
 /*!*/
-template<typename OP, typename A_T, typename B_T, typename DataType, exprType A_EType,
-         exprType B_EType>
-MGLORIA_INLINE_NORMAL BinaryExpr<OP, A_T, B_T, DataType, A_EType | B_EType | Mapped_t> operator+(
-    const Expression<A_T, DataType, A_EType>& lhs, const Expression<B_T, DataType, B_EType>& rhs) {
+template<typename A_T, typename B_T, typename DataType, exprType A_EType, exprType B_EType>
+MGLORIA_INLINE_NORMAL BinaryExpr<op::_plus, A_T, B_T, DataType, A_EType | B_EType | Mapped_t>
+operator+(const Expression<A_T, DataType, A_EType>& lhs,
+          const Expression<B_T, DataType, B_EType>& rhs) {
   return Func<op::_plus>(lhs, rhs);
 }
 
 /*!*/
-template<typename OP, typename A_T, typename B_T, typename DataType, exprType A_EType,
-         exprType B_EType>
-MGLORIA_INLINE_NORMAL BinaryExpr<OP, A_T, B_T, DataType, A_EType | B_EType | Mapped_t> operator-(
-    const Expression<A_T, DataType, A_EType>& lhs, const Expression<B_T, DataType, B_EType>& rhs) {
+template<typename A_T, typename B_T, typename DataType, exprType A_EType, exprType B_EType>
+MGLORIA_INLINE_NORMAL BinaryExpr<op::_minus, A_T, B_T, DataType, A_EType | B_EType | Mapped_t>
+operator-(const Expression<A_T, DataType, A_EType>& lhs,
+          const Expression<B_T, DataType, B_EType>& rhs) {
   return Func<op::_minus>(lhs, rhs);
 }
 
 /*!*/
-template<typename OP, typename A_T, typename B_T, typename DataType, exprType A_EType,
-         exprType B_EType>
-MGLORIA_INLINE_NORMAL BinaryExpr<OP, A_T, B_T, DataType, A_EType | B_EType | Mapped_t> operator*(
-    const Expression<A_T, DataType, A_EType>& lhs, const Expression<B_T, DataType, B_EType>& rhs) {
+template<typename A_T, typename B_T, typename DataType, exprType A_EType, exprType B_EType>
+MGLORIA_INLINE_NORMAL BinaryExpr<op::_mul, A_T, B_T, DataType, A_EType | B_EType | Mapped_t>
+operator*(const Expression<A_T, DataType, A_EType>& lhs,
+          const Expression<B_T, DataType, B_EType>& rhs) {
   return Func<op::_mul>(lhs, rhs);
 }
 
 /*!*/
-template<typename OP, typename A_T, typename B_T, typename DataType, exprType A_EType,
-         exprType B_EType>
-MGLORIA_INLINE_NORMAL BinaryExpr<OP, A_T, B_T, DataType, A_EType | B_EType | Mapped_t> operator/(
-    const Expression<A_T, DataType, A_EType>& lhs, const Expression<B_T, DataType, B_EType>& rhs) {
+template<typename A_T, typename B_T, typename DataType, exprType A_EType, exprType B_EType>
+MGLORIA_INLINE_NORMAL BinaryExpr<op::_div, A_T, B_T, DataType, A_EType | B_EType | Mapped_t>
+operator/(const Expression<A_T, DataType, A_EType>& lhs,
+          const Expression<B_T, DataType, B_EType>& rhs) {
   return Func<op::_div>(lhs, rhs);
 }
 
@@ -362,7 +363,8 @@ MGLORIA_INLINE_NORMAL DotExpr<A_T, B_T, true, true, DataType> dot(
     const TransposeExpr<A_T, DataType>& lhs, const TransposeExpr<B_T, DataType>& rhs) {
   return DotExpr<A_T, B_T, true, true, DataType>(lhs.Self(), rhs.Self(), DataType(1.f));
 }
-
 }  // namespace expr
+
 }  // namespace mgloria
+
 #endif

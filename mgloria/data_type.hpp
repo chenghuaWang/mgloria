@@ -7,7 +7,7 @@
 
 #ifndef _MGLORIA_DATA_TYPE_HPP
 #define _MGLORIA_DATA_TYPE_HPP
-
+#pragma once
 #include "prepare.hpp"
 namespace mgloria {
 typedef int32_t index_t;

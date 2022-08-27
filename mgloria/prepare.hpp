@@ -10,9 +10,8 @@
 
 #ifndef MGLORIA_PREPARE_HPP
 #define MGLORIA_PREPARE_HPP
-
-#if _MSC_VER > 1000
 #pragma once
+#if _MSC_VER
 #error "Detected you are using MSVC to compile. MSVC is not support. Also, windows platform."
 #endif
 
@@ -46,6 +45,12 @@
 
 #ifndef MGLORIA_USE_SSE
 #define MGLORIA_USE_SSE 1
+#endif
+
+#if MGLORIA_USE_SSE == 1
+#define MGLORIA_VECTORIZATION_ARCH mgloria::vectorization::VecArch::SSE_Arch
+#else
+#define MGLORIA_VECTORIZATION_ARCH mgloria::vectorization::VecArch::NONE_Arch
 #endif
 
 // include files for CUDA and C-Blas
@@ -165,6 +170,8 @@ class _log_stream {
 
 #define MGLORIA_ARRAY_BOUND_CHECK 0
 #define MGLORIA_PAD_TO_ALIGN 1
+#define MGLORIA_RUNTIME_SHAPE_CHECK 1
+#define MGLORIA_RUNTIME_DEVICE_TYPE_CHECK 1
 
 template<typename DataType>
 MGLORIA_INLINE_XPU DataType MINLimit();
@@ -234,5 +241,10 @@ MGLORIA_INLINE_XPU uint8_t MAXLimit<uint8_t>() {
 
 #define MGLORIA_IS_NAN(func) std::isnan(func)
 #define MGLORIA_IS_INF(func) std::isinf(func)
+
+#define MGLORIA_SHAPE_ERROR_EXIT 1
+#define MGLORIA_TYPE_ERROR_EXIT 2
+#define MGLORIA_MEM_ERROR_EXIT 3
+#define MGLORIA_OTHER_ERROR_EXIT 4
 
 #endif  // MGLORIA_PREPARE_HPP_

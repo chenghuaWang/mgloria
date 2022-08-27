@@ -9,6 +9,7 @@
 
 #ifndef _MGLORIA_TENSOR_SHAPE_HPP_
 #define _MGLORIA_TENSOR_SHAPE_HPP_
+#pragma once
 #include "depends.hpp"
 
 namespace mgloria {

@@ -7,6 +7,7 @@
  */
 #ifndef _MGLORIA_TENSOR_HPP_
 #define _MGLORIA_TENSOR_HPP_
+#pragma once
 #include <iostream>
 #include "depends.hpp"
 #include "expression.hpp"
@@ -44,7 +45,7 @@ MGLORIA_INLINE_NORMAL void SetCurrentDevice(int devIdx);
 
 /*!
  *@brief        Tensor will be abstract as a expression named Tensor Expression
- * (TRValue) for the tensor is right value. The Container is the Tensor. and Dat-
+ * (TRValue) for the tensor is real value. The Container is the Tensor. and Dat-
  * aType is the tensor's data type.
  */
 template<typename Container, typename Device, int Dims, typename DataType>
@@ -404,11 +405,37 @@ class TensorT : public Tensor<Device, dims, DataType> {
   bool align = false;
 };  /// TensorT for more than 1 dims
 
-}  // namespace mgloria
+//##############################################################################
+//          Below is the definition of how to map the expression to tensor.    #
+//          The implementation should in tensor_cpu.hpp and tensor_gpu.hpp .   #
+//##############################################################################
+/*!
+ *@brief
+ */
+template<typename LV, typename RV, typename Device, int Dims, typename DataType, typename A_T,
+         expr::exprType EType>
+inline void MapExpr2Tensor(TRValue<RV, Device, Dims, DataType>* dst,
+                           const expr::Expression<A_T, DataType, EType>& exp);
+
+/*!
+ *@brief
+ */
+template<typename LV, typename RV, int Dims, typename DataType, typename A_T, expr::exprType EType>
+inline void MapExpr2Tensor(TRValue<RV, CPU, Dims, DataType>* dst,
+                           const expr::Expression<A_T, DataType, EType>& exp);
+
+/*!
+ *@brief
+ */
+template<typename LV, typename RV, int Dims, typename DataType, typename A_T, expr::exprType EType>
+inline void MapExpr2Tensor(TRValue<RV, GPU, Dims, DataType>* dst,
+                           const expr::Expression<A_T, DataType, EType>& exp);
 
 //##############################################################################
 //          Below to define Tensor based operation such as Max, Min, SofMax    #
 //          The implementation should in tensor_cpu.hpp and tensor_gpu.hpp .   #
 //##############################################################################
+
+}  // namespace mgloria
 
 #endif

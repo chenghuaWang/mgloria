@@ -7,7 +7,7 @@
 
 #ifndef _MGLORIA_DATA_LAYOUT_HPP
 #define _MGLORIA_DATA_LAYOUT_HPP
-
+#pragma once
 #include "prepare.hpp"
 
 namespace mgloria {

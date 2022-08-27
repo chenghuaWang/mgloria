@@ -7,6 +7,7 @@
 
 #ifndef _MGLORIA_STREAM_GPU_HPP_
 #define _MGLORIA_STREAM_GPU_HPP_
+#pragma once
 #include "tensor_stream.hpp"
 #if MGLORIA_USE_CUDA == 1
 #include <memory>
@@ -16,12 +17,6 @@ enum class HandleStatus : uint8_t {
   no = 0,
   own = 1,
 };
-
-template<typename device>
-MGLORIA_INLINE_NORMAL void FreeStream(Stream<device>* stream);
-
-template<typename device>
-MGLORIA_INLINE_NORMAL Stream<device>* NewStream(index_t devIdx);
 
 #if MGLORIA_USE_CUDNN == 1
 template<typename device>
