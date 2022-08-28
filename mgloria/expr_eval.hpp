@@ -1,6 +1,8 @@
 #ifndef _MGLORIA_EXPR_EVAL_HPP_
 #define _MGLORIA_EXPR_EVAL_HPP_
+
 #pragma once
+
 #include "depends.hpp"
 #include "expression.hpp"
 #include "prepare.hpp"
@@ -30,9 +32,9 @@ template<typename Device, typename DataType>
 struct Job<Tensor<Device, 1, DataType>, DataType> {
   explicit Job(const Tensor<Device, 1, DataType>& T) : __data_ptr(T.__data_ptr) {}
 
-  MGLORIA_INLINE_NORMAL const DataType& Eval(index_t x, index_t y) const { return __data_ptr[x]; }
+  MGLORIA_INLINE_NORMAL const DataType& Eval(index_t y, index_t x) const { return __data_ptr[x]; }
 
-  MGLORIA_INLINE_NORMAL DataType& REval(index_t x, index_t y) const { return __data_ptr[x]; }
+  MGLORIA_INLINE_NORMAL DataType& REval(index_t y, index_t x) const { return __data_ptr[x]; }
 
  private:
   DataType* __data_ptr;

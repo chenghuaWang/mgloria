@@ -55,10 +55,11 @@
 #endif
 
 #if MGLORIA_USE_SSE == 1
-#define MGLORIA_VECTORIZATION_ARCH mgloria::vectorization::VecArch::SSE_Arch
+#define MGLORIA_VECTORIZATION_ARCH ::mgloria::vectorization::VecArch::SSE_Arch
 #else
-#define MGLORIA_VECTORIZATION_ARCH mgloria::vectorization::VecArch::NONE_Arch
+#define MGLORIA_VECTORIZATION_ARCH ::mgloria::vectorization::VecArch::NONE_Arch
 #endif
+#define MGLORIA_DEFAULT_ALIGNBYTES 4
 
 // include files for CUDA and C-Blas
 #if MGLORIA_USE_MKL
@@ -180,6 +181,7 @@ class _log_stream {
 #endif  // MGLORIA_USE_CUDA == 1
 
 #define MGLORIA_ARRAY_BOUND_CHECK 0
+#define MGLORIA_CHECK_NULL_MEM_PTR 1
 #define MGLORIA_PAD_TO_ALIGN 1
 #define MGLORIA_RUNTIME_SHAPE_CHECK 1
 #define MGLORIA_RUNTIME_DEVICE_TYPE_CHECK 1
@@ -252,6 +254,8 @@ MGLORIA_INLINE_XPU uint8_t MAXLimit<uint8_t>() {
 
 #define MGLORIA_IS_NAN(func) std::isnan(func)
 #define MGLORIA_IS_INF(func) std::isinf(func)
+
+#define NO_TYPE_PTR void*
 
 #define MGLORIA_SHAPE_ERROR_EXIT 1
 #define MGLORIA_TYPE_ERROR_EXIT 2
