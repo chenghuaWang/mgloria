@@ -17,7 +17,9 @@ MGLORIA_INLINE_NORMAL void ShutdownTensorComputeMachine<CPU>(int devIdx) {
 }
 
 template<>
-MGLORIA_INLINE_NORMAL void SetCurrentDevice<CPU>(int devIdx) {}
+MGLORIA_INLINE_NORMAL void SetCurrentDevice<CPU>(int devIdx) {
+  LOG_WARN << "Actually, we have not support multi physical CPU\n";
+}
 
 template<>
 MGLORIA_INLINE_NORMAL void FreeStream(Stream<CPU>* stream) {

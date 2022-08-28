@@ -1,4 +1,4 @@
-project(mgloria_test C CXX)
+project(mgloria_test C CXX CUDA)
 
 include_directories(${mgloria_head_dir})
 

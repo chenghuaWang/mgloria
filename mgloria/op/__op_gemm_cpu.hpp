@@ -1,6 +1,9 @@
 #ifndef _MGLORIA___OP_GEMM_CPU_HPP_
 #define _MGLORIA___OP_GEMM_CPU_HPP_
+
+///! The #pragma once must be used in this file to prevent recursively include.
 #pragma once
+
 #include "../runtime_check.hpp"
 #include "./op/__op_cpu.hpp"
 #include "../vectorization/__vec_prepare.hpp"

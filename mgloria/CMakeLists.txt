@@ -15,4 +15,5 @@ add_library(mgloria INTERFACE
     ${mgloria_file_cuda_hpps}
 )
 target_include_directories(mgloria INTERFACE ./)
-target_compile_features(mgloria INTERFACE cxx_std_20)
+target_compile_features(mgloria INTERFACE cxx_std_14)
+set_target_properties(mgloria PROPERTIES CUDA_SEPARABLE_COMPILATION ON)

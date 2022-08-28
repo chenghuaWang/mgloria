@@ -10,7 +10,10 @@
 
 #ifndef MGLORIA_PREPARE_HPP
 #define MGLORIA_PREPARE_HPP
+
+///! All files in this head only lib using #pragma once. Make sure your compiler support it.
 #pragma once
+
 #if _MSC_VER
 #error "Detected you are using MSVC to compile. MSVC is not support. Also, windows platform."
 #endif

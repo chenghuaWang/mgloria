@@ -89,7 +89,7 @@ if(OF_FORCE_COLORED_DIAGNOSTICS)
     $<$<COMPILE_LANGUAGE:CUDA>:$<$<CUDA_COMPILER_ID:Clang>:-fcolor-diagnostics>>)
 endif()
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(THIRD_PARTY_DIR "${PROJECT_BINARY_DIR}/third_party_install"
@@ -123,7 +123,7 @@ if (USE_CUDA)
     set(CUDA_SEPARABLE_COMPILATION OFF)
 
     if("${CMAKE_CUDA_COMPILER_ID}" STREQUAL "NVIDIA")
-        if(CMAKE_CUDA_COMPILER_VERSION VERSION_GREATER_EQUAL "11.2")
+        if(CMAKE_CUDA_COMPILER_VERSION VERSION_GREATER_EQUAL "11.7")
             set(CUDA_NVCC_THREADS_NUMBER "4" CACHE STRING "")
             list(APPEND CUDA_NVCC_FLAGS -t ${CUDA_NVCC_THREADS_NUMBER})
         endif()
@@ -137,6 +137,7 @@ message(STATUS "CMAKE_CXX_COMPILER_VERSION: " ${CMAKE_CXX_COMPILER_VERSION})
 set(mgloria_head_dir ${PROJECT_SOURCE_DIR}/mgloria)
 set(mgloria_ps_head_dir ${PROJECT_SOURCE_DIR}/mgloria_ps)
 
+file(GLOB_RECURSE mgloria_files *.hpp *.cuh)
 
 add_subdirectory(mgloria)
 add_subdirectory(mgloria_ps)
