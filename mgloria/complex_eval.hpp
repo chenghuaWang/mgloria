@@ -9,8 +9,9 @@
 #pragma once
 #include "op/__op_gemm_cpu.hpp"
 #if MGLORIA_USE_CUDA == 1
+#ifdef __CUDACC__
 #include "cuda/tensor_gpu.cuh"
-
+#endif
 #endif
 
 namespace mgloria {

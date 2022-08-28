@@ -82,8 +82,11 @@ else()
   message(FATAL_ERROR "CPU_THREADING_RUNTIME must be one of: TBB, OMP, SEQ")
 endif()
 
+if (USE_CUDA)
 add_definitions("-xcuda")
-add_definitions("--cuda-path=/usr/local/cuda")
+add_definitions("--cuda-path=/usr/local/cuda-11.7")
+add_definitions("--cuda-gpu-arch=sm_80")
+endif()
 
 if(OF_FORCE_COLORED_DIAGNOSTICS)
   add_compile_options(
@@ -92,7 +95,7 @@ if(OF_FORCE_COLORED_DIAGNOSTICS)
     $<$<COMPILE_LANGUAGE:CUDA>:$<$<CUDA_COMPILER_ID:Clang>:-fcolor-diagnostics>>)
 endif()
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(THIRD_PARTY_DIR "${PROJECT_BINARY_DIR}/third_party_install"

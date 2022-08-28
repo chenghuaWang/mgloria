@@ -22,6 +22,10 @@
 #error "Detected you are using MacOS, Mac not support MKL and CUDA. Compile interrupt."
 #endif  // __APPLE__
 
+// #if __clang__
+// #include <__clang_cuda_runtime_wrapper.h>
+// #endif
+
 // include basic files.
 #include <cstdio>
 #include <cmath>
@@ -64,7 +68,7 @@
 #include <mkl/mkl_vsl_functions.h>
 #include <mkl/mkl_version.h>
 #endif
-#if MGLORIA_USE_CUDA
+#if MGLORIA_USE_CUDA == 1
 #include <cuda.h>
 #include <cublas_v2.h>
 #include <curand.h>
@@ -115,19 +119,23 @@ class _log_stream {
   static std::ostream& make_stream(const char* file, int line, const _log_type& t) {
     switch (t) {
       case _log_type::warn: {
-        std::cout << "[Warn] [" << file << " at line " << line << "] ";
+        std::cout << "[Warn] [" << file << "(" << line << ", 0)"
+                  << "] ";
         return std::cout;
       }
       case _log_type::err: {
-        std::cerr << "[Err] [" << file << " at line " << line << "] ";
+        std::cerr << "[Err] [" << file << "(" << line << ", 0)"
+                  << "] ";
         return std::cerr;
       }
       case _log_type::debug: {
-        std::cout << "[Debug] [" << file << " at line " << line << "] ";
+        std::cout << "[Debug] [" << file << "(" << line << ", 0)"
+                  << "] ";
         return std::cout;
       }
       default: {
-        std::cout << "[Info] [" << file << " at line " << line << "] ";
+        std::cout << "[Info] [" << file << "(" << line << ", 0)"
+                  << "] ";
         return std::cout;
       }
     }
