@@ -1,3 +1,9 @@
+/*!
+ *@author chenghua.wang
+ *@file   runtime_check.hpp
+ *@brief  The runtime check for shape and device Type checking.
+ */
+
 #ifndef _MGLORIA_RUNTIME_CHECK_HPP_
 #define _MGLORIA_RUNTIME_CHECK_HPP_
 #pragma once
