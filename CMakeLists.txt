@@ -82,6 +82,9 @@ else()
   message(FATAL_ERROR "CPU_THREADING_RUNTIME must be one of: TBB, OMP, SEQ")
 endif()
 
+add_definitions("-xcuda")
+add_definitions("--cuda-path=/usr/local/cuda")
+
 if(OF_FORCE_COLORED_DIAGNOSTICS)
   add_compile_options(
     $<$<COMPILE_LANGUAGE:CXX>:$<$<CXX_COMPILER_ID:GNU>:-fdiagnostics-color=always>>
