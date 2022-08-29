@@ -78,6 +78,9 @@
 // TODO include something.
 #endif
 
+#define MGLORIA_VECTORIZATION_TRUE true
+#define MGLORIA_VECTORIZATION_FALSE false
+
 // inline symbol for template code used in both gpu and cpu
 #ifdef MGLORIA_INLINE
 #error "You can not predefine MGLORIA_INLINE. It's used in this lib."

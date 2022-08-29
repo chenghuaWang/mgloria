@@ -42,7 +42,9 @@ template<typename DataType, VecArch Arch = MGLORIA_VECTORIZATION_ARCH>
 struct Vectorized {};
 
 template<typename OP, typename DataType, VecArch Arch>
-struct VectorizedOP {};
+struct VectorizedOP {
+  static const bool m_Enable = MGLORIA_VECTORIZATION_FALSE;
+};
 
 template<typename DataType, VecArch Arch>
 struct VectorizedOP<op::_plus, DataType, Arch> {
@@ -50,6 +52,8 @@ struct VectorizedOP<op::_plus, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return lhs + rhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -58,6 +62,8 @@ struct VectorizedOP<op::_minus, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return lhs - rhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -66,6 +72,8 @@ struct VectorizedOP<op::_mul, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return lhs * rhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -74,6 +82,8 @@ struct VectorizedOP<op::_div, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return lhs / rhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -82,6 +92,8 @@ struct VectorizedOP<op::_left, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return lhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -90,6 +102,8 @@ struct VectorizedOP<op::_right, DataType, Arch> {
                                                           const Vectorized<DataType, Arch>& rhs) {
     return rhs;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename DataType, VecArch Arch>
@@ -98,6 +112,8 @@ struct VectorizedOP<op::_identity, DataType, Arch> {
       const Vectorized<DataType, Arch>& single) {
     return single;
   }
+
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
 };
 
 template<typename LeftValue, typename TFloat, VecArch Arch>

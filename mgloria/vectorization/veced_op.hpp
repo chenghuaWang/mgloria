@@ -8,9 +8,6 @@
 #ifndef _MGLORIA___VECED_OP_HPP_
 #define _MGLORIA___VECED_OP_HPP_
 
-#include "expression.hpp"
-#include "prepare.hpp"
-#include "tensor.hpp"
 #pragma once
 
 #include "../depends.hpp"
@@ -182,8 +179,12 @@ MGLORIA_INLINE_NORMAL void ExecuteVectorizedJob(Tensor<CPU, Dims, DataType> _dst
     for (index_t x = xlen; x < dst.size(1); ++x) { LeftValue::Save(dst[y][x], plan.Eval(y, x)); }
   }
 }
-
 }  // namespace expr
+
+// ############################### Below for Vectorization Enable check. #####################
+
+// ############################### Below for check Data is ok for Vec ########################
+
 }  // namespace mgloria
 
 #endif
