@@ -54,7 +54,7 @@ struct VectorizedJob<Tensor<Device, 1, DataType>, DataType, Arch> {
 template<typename Device, int Dims, typename DataType, vectorization::VecArch Arch>
 struct VectorizedJob<Tensor<Device, Dims, DataType>, DataType, Arch> {
   explicit VectorizedJob(const Tensor<Device, Dims, DataType>& t)
-      : __data_ptr(t.__data_ptr), m_Stride(t.m_Stride) {}
+      : __data_ptr(t.__data_ptr), m_Stride(t.m_Stride_) {}
 
   MGLORIA_INLINE_CPU DataType Eval(index_t y, index_t x) const {
     return __data_ptr[y * m_Stride + x];

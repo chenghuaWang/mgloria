@@ -39,7 +39,7 @@ struct Job<Tensor<Device, 1, DataType>, DataType> {
 
   MGLORIA_INLINE_NORMAL const DataType& Eval(index_t y, index_t x) const { return __data_ptr[x]; }
 
-  MGLORIA_INLINE_NORMAL DataType& REval(index_t y, index_t x) const { return __data_ptr[x]; }
+  MGLORIA_INLINE_NORMAL DataType& REval(index_t y, index_t x) { return __data_ptr[x]; }
 
  private:
   DataType* __data_ptr;
@@ -51,7 +51,7 @@ struct Job<Tensor<Device, 1, DataType>, DataType> {
 template<typename Device, int32_t Dims, typename DataType>
 struct Job<Tensor<Device, Dims, DataType>, DataType> {
   explicit Job(const Tensor<Device, Dims, DataType>& T)
-      : __data_ptr(T.__data_ptr), m_Stride(T.m_Stride) {}
+      : __data_ptr(T.__data_ptr), m_Stride(T.m_Stride_) {}
 
   MGLORIA_INLINE_NORMAL const DataType& Eval(index_t x, index_t y) const {
     return __data_ptr[y * m_Stride + x];
@@ -79,7 +79,7 @@ struct Job<TransposeExpr<E, DataType>, DataType> {
     return m_job.Eval(x, y);
   }
 
-  const Job<E, DataType>& m_job;
+  Job<E, DataType> m_job;
 };
 
 // Below is the Scalar Job.
@@ -105,7 +105,7 @@ struct Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType> {
     return DstDType(m_job.Eval(y, x));
   }
 
-  const Job<A_T, OriDataType>& m_job;
+  Job<A_T, OriDataType> m_job;
 };
 
 // Below is the Unary Job.
@@ -115,9 +115,11 @@ struct Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType> {
 template<typename OP, typename A_T, typename DataType, exprType EType>
 struct Job<UnaryExpr<OP, A_T, DataType, EType>, DataType> {
   explicit Job(const Job<A_T, DataType>& _job) : m_job(_job) {}
-  MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) { return OP::Do(m_job.Eval(y, x)); }
+  MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) const {
+    return OP::Do(m_job.Eval(y, x));
+  }
 
-  const Job<A_T, DataType>& m_job;
+  Job<A_T, DataType> m_job;
 };
 
 // Below is the Binary Job.
@@ -128,12 +130,12 @@ template<typename OP, typename A_T, typename B_T, typename DataType, exprType ET
 struct Job<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType> {
   explicit Job(const Job<A_T, DataType>& _lhs, const Job<B_T, DataType>& _rhs)
       : m_lhs(_lhs), m_rhs(_rhs) {}
-  MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) {
+  MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) const {
     return OP::Do(m_lhs.Eval(y, x), m_rhs.Eval(y, x));
   }
 
-  const Job<A_T, DataType>& m_lhs;
-  const Job<B_T, DataType>& m_rhs;
+  Job<A_T, DataType> m_lhs;
+  Job<B_T, DataType> m_rhs;
 };
 
 // Below is the Ternary Job.
@@ -149,9 +151,9 @@ struct Job<TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>, DataType> {
     return OP::Do(m_1.Eval(y, x), m_2.Eval(y, x), m_3.Eval(y, x));
   }
 
-  const Job<A_T, DataType>& m_1;
-  const Job<B_T, DataType>& m_2;
-  const Job<C_T, DataType>& m_3;
+  Job<A_T, DataType> m_1;
+  Job<B_T, DataType> m_2;
+  Job<C_T, DataType> m_3;
 };
 
 // Below is the functions for easily use.
@@ -201,7 +203,7 @@ MGLORIA_INLINE_NORMAL Job<E, DataType> NewJob(const RValueExpr<E, DataType>& e) 
 template<typename E, typename DataType>
 MGLORIA_INLINE_NORMAL Job<TransposeExpr<E, DataType>, DataType> NewJob(
     const TransposeExpr<E, DataType>& e) {
-  return TransposeExpr<E, DataType>(NewJob(e.m_expr));
+  return Job<TransposeExpr<E, DataType>, DataType>(NewJob(e.m_expr));
 }
 
 /*!
@@ -210,7 +212,7 @@ MGLORIA_INLINE_NORMAL Job<TransposeExpr<E, DataType>, DataType> NewJob(
 template<typename OP, typename A_T, typename DataType, exprType EType>
 MGLORIA_INLINE_NORMAL Job<UnaryExpr<OP, A_T, DataType, EType>, DataType> NewJob(
     const UnaryExpr<OP, A_T, DataType, EType>& e) {
-  return UnaryExpr<OP, A_T, DataType, EType>(NewJob(e.m_entity));
+  return Job<UnaryExpr<OP, A_T, DataType, EType>, DataType>(NewJob(e.m_entity));
 }
 
 /*!
@@ -219,7 +221,7 @@ MGLORIA_INLINE_NORMAL Job<UnaryExpr<OP, A_T, DataType, EType>, DataType> NewJob(
 template<typename OP, typename A_T, typename B_T, typename DataType, exprType EType>
 MGLORIA_INLINE_NORMAL Job<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType> NewJob(
     const BinaryExpr<OP, A_T, B_T, DataType, EType>& e) {
-  return BinaryExpr<OP, A_T, B_T, DataType, EType>(NewJob(e.m_lhs), NewJob(e.m_rhs));
+  return Job<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType>(NewJob(e.m_lhs), NewJob(e.m_rhs));
 }
 
 /*!
@@ -228,8 +230,8 @@ MGLORIA_INLINE_NORMAL Job<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType> N
 template<typename OP, typename A_T, typename B_T, typename C_T, typename DataType, exprType EType>
 MGLORIA_INLINE_NORMAL Job<TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>, DataType> NewJob(
     const TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>& e) {
-  return TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>(NewJob(e.m_1), NewJob(e.m_2),
-                                                         NewJob(e.m_3));
+  return Job<TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>, DataType>(
+      NewJob(e.m_1), NewJob(e.m_2), NewJob(e.m_3));
 }
 
 //##############################################################################

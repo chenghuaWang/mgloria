@@ -185,6 +185,7 @@ class _log_stream {
 #define MGLORIA_PAD_TO_ALIGN 1
 #define MGLORIA_RUNTIME_SHAPE_CHECK 1
 #define MGLORIA_RUNTIME_DEVICE_TYPE_CHECK 1
+#define MGLORIA_MAX_SHOW_LENGTH 8
 
 template<typename DataType>
 MGLORIA_INLINE_XPU DataType MINLimit();

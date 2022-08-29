@@ -60,7 +60,7 @@ exprType Complex_t = 7;  ///! complex operation, such as dot product.
 template<typename SubType, typename DataType, exprType EType>
 struct Expression {
   MGLORIA_INLINE_NORMAL SubType* SelfPtr() { return static_cast<SubType*>(this); }
-  MGLORIA_INLINE_NORMAL const SubType& Self() const { return *static_cast<SubType*>(this); }
+  MGLORIA_INLINE_NORMAL const SubType& Self() const { return *static_cast<const SubType*>(this); }
 };
 
 /*!
@@ -189,7 +189,7 @@ struct RValueExpr : public Expression<Container, DataType, RValue_t> {
   /*!*/
   template<typename A_T, exprType EType>
   MGLORIA_INLINE_NORMAL Container& __dispatch(const Expression<A_T, DataType, EType>& exp) {
-    ExpressionDispatcher<op::_saveto, Container, DataType>::Eval(this->SelfPtr(), exp.self());
+    ExpressionDispatcher<op::_saveto, Container, DataType>::Eval(this->SelfPtr(), exp.Self());
     return *(this->SelfPtr());
   }
 

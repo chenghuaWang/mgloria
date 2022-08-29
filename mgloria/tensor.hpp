@@ -150,7 +150,7 @@ class Tensor : public TRValue<Tensor<Device, Dims, DataType>, Device, Dims, Data
   MGLORIA_INLINE_NORMAL int32_t AllElementNum() const { return SubElementNum<0>(); }
 
   // Get the size.
-  MGLORIA_INLINE_NORMAL index_t size(index_t i) { return m_Shape[i]; }
+  MGLORIA_INLINE_NORMAL index_t size(index_t i) const { return m_Shape[i]; }
 
   // Get the Memory cost.
   template<index_t start>
@@ -312,7 +312,7 @@ class Tensor<Device, 1, DataType>
     return m_Shape[0];
   }
 
-  MGLORIA_INLINE_NORMAL int32_t AllElementNum() const { return SubElementNum<>(); }
+  MGLORIA_INLINE_NORMAL int32_t AllElementNum() const { return SubElementNum<0>(); }
 
   // Get the Memory cost.
   template<index_t start>
@@ -320,7 +320,7 @@ class Tensor<Device, 1, DataType>
     return SubElementNum<>() * sizeof(DataType);
   }
 
-  MGLORIA_INLINE_NORMAL size_t AllMemCost() const { return SubElementNum<>() * sizeof(DataType); }
+  MGLORIA_INLINE_NORMAL size_t AllMemCost() const { return SubElementNum<0>() * sizeof(DataType); }
 
   // Tensor shape operate.
   MGLORIA_INLINE_NORMAL Tensor<Device, 1, DataType> Flatten1D() const {
