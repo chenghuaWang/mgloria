@@ -149,6 +149,9 @@ class Tensor : public TRValue<Tensor<Device, Dims, DataType>, Device, Dims, Data
 
   MGLORIA_INLINE_NORMAL int32_t AllElementNum() const { return SubElementNum<0>(); }
 
+  // Get the size.
+  MGLORIA_INLINE_NORMAL index_t size(index_t i) { return m_Shape[i]; }
+
   // Get the Memory cost.
   template<index_t start>
   MGLORIA_INLINE_NORMAL size_t SubMemCost() const {

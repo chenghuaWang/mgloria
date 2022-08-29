@@ -9,7 +9,6 @@
 #define _MGLORIA___VEC_MM_HPP_
 
 ///! This file is include recursively. Conflict to __vec_prepare.hpp
-#include <cstdlib>
 #pragma once
 
 #include <malloc.h>

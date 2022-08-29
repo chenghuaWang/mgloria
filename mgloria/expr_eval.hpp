@@ -7,7 +7,6 @@
 #include "expression.hpp"
 #include "prepare.hpp"
 #include "tensor.hpp"
-#include "complex_eval.hpp"
 
 namespace mgloria {
 namespace expr {
@@ -22,7 +21,13 @@ template<typename ExpressionType, typename DataType>
 struct Job {
   MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) const;
 };
+}  // namespace expr
+}  // namespace mgloria
 
+#include "complex_eval.hpp"
+
+namespace mgloria {
+namespace expr {
 // Below is the tensor Job.
 
 /*!
@@ -168,9 +173,9 @@ MGLORIA_INLINE_NORMAL Job<TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>, DataT
  *@brief
  */
 template<typename DataType>
-MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(
-    const Job<ScalarExpr<DataType>, DataType>& e) {
-  return Job<ScalarExpr<DataType>, DataType>(e.m_Scalar);
+MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(const ScalarExpr<DataType>,
+                                                                 DataType& e) {
+  return Job<ScalarExpr<DataType>, DataType>(e.scale_value);
 }
 
 /*!
@@ -178,7 +183,7 @@ MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(
  */
 template<typename OriDataType, typename DisDataType, typename A_T, exprType EType>
 MGLORIA_INLINE_NORMAL Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType> NewJob(
-    const Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType>& e) {
+    const TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType& e) {
   return Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType>(e.m_expr);
 }
 
