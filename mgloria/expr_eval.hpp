@@ -175,8 +175,7 @@ MGLORIA_INLINE_NORMAL Job<TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>, DataT
  *@brief
  */
 template<typename DataType>
-MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(const ScalarExpr<DataType>,
-                                                                 DataType& e) {
+MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(const ScalarExpr<DataType>& e) {
   return Job<ScalarExpr<DataType>, DataType>(e.scale_value);
 }
 
