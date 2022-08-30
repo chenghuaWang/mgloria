@@ -118,7 +118,7 @@ struct VectorizedOP<op::_identity, DataType, Arch> {
 
 template<typename LeftValue, typename TFloat, VecArch Arch>
 struct VectorizedSaver {
-  MGLORIA_INLINE_CPU static void Save(TFloat* dst, const Vectorized<TFloat, Arch>& src) {
+  MGLORIA_INLINE_CPU static void Do(TFloat* dst, const Vectorized<TFloat, Arch>& src) {
     Vectorized<TFloat, Arch> lhs = Vectorized<TFloat, Arch>::Load(dst);
     Vectorized<TFloat, Arch> ans =
         VectorizedOP<typename LeftValue::OPType, TFloat, Arch>::Do(lhs, src);
@@ -127,7 +127,7 @@ struct VectorizedSaver {
 };
 template<typename TFloat, VecArch Arch>
 struct VectorizedSaver<op::_saveto, TFloat, Arch> {
-  MGLORIA_INLINE_CPU static void Save(TFloat* dst, const Vectorized<TFloat, Arch>& src) {
+  MGLORIA_INLINE_CPU static void Do(TFloat* dst, const Vectorized<TFloat, Arch>& src) {
     src.Store(dst);
   }
 };

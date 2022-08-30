@@ -186,7 +186,7 @@ MGLORIA_INLINE_NORMAL Job<ScalarExpr<DataType>, DataType> NewJob(const ScalarExp
 template<typename OriDataType, typename DisDataType, typename A_T, exprType EType>
 MGLORIA_INLINE_NORMAL Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType> NewJob(
     const TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType& e) {
-  return Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType>(e.m_expr);
+  return Job<TypeCastExpr<OriDataType, DisDataType, A_T, EType>, DisDataType>(NewJob(e.m_expr));
 }
 
 /*!

@@ -134,6 +134,11 @@ class Tensor : public TRValue<Tensor<Device, Dims, DataType>, Device, Dims, Data
 
   MGLORIA_INLINE_NORMAL const Shape<Dims>& GetShape() const { return m_Shape; }
 
+  // Check memory Contiguous.
+  MGLORIA_INLINE_NORMAL bool IsContiguous() const {
+    return m_Shape[ms_Dimensions_in_use] == m_Stride_;
+  }
+
   // Get element number.
   template<index_t start>
   MGLORIA_INLINE_NORMAL int32_t SubElementNum() const {
@@ -305,6 +310,9 @@ class Tensor<Device, 1, DataType>
   MGLORIA_INLINE_NORMAL void SetShape(const Shape<1>& shape) { m_Shape = shape; }
 
   MGLORIA_INLINE_NORMAL const Shape<1>& GetShape() const { return m_Shape; }
+
+  // Check memory Contiguous.
+  MGLORIA_INLINE_NORMAL bool IsContiguous() const { return true; }
 
   // Get element number.
   template<index_t start>  // still keep this template same as n-dimensions.

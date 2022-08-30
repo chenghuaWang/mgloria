@@ -93,11 +93,11 @@ class VectorizedJob<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType, Arch> {
                 const VectorizedJob<B_T, DataType, Arch>& rhs)
       : m_lhs(lhs), m_rhs(rhs) {}
   MGLORIA_INLINE_CPU vectorization::Vectorized<DataType, Arch> EvalVec(index_t y, index_t x) const {
-    return vectorization::VectorizedOP<OP, DataType, Arch>::Map(m_lhs.EvalVec(y, x),
-                                                                m_rhs.EvalVec(y, x));
+    return vectorization::VectorizedOP<OP, DataType, Arch>::Do(m_lhs.EvalVec(y, x),
+                                                               m_rhs.EvalVec(y, x));
   }
   MGLORIA_INLINE_CPU DataType Eval(index_t y, index_t x) const {
-    return OP::Map(m_lhs.Eval(y, x), m_rhs.Eval(y, x));
+    return OP::Do(m_lhs.Eval(y, x), m_rhs.Eval(y, x));
   }
 
  private:
@@ -113,9 +113,9 @@ class VectorizedJob<UnaryExpr<OP, A_T, DataType, EType>, DataType, Arch> {
  public:
   VectorizedJob(const VectorizedJob<A_T, DataType, Arch>& src) : m_src(src) {}
   MGLORIA_INLINE_CPU vectorization::Vectorized<DataType> EvalVec(index_t y, index_t x) const {
-    return vectorization::VectorizedOP<OP, DataType, Arch>::Map(m_src.EvalVec(y, x));
+    return vectorization::VectorizedOP<OP, DataType, Arch>::Do(m_src.EvalVec(y, x));
   }
-  MGLORIA_INLINE_CPU DataType Eval(index_t y, index_t x) const { return OP::Map(m_src.Eval(y, x)); }
+  MGLORIA_INLINE_CPU DataType Eval(index_t y, index_t x) const { return OP::Do(m_src.Eval(y, x)); }
 
  private:
   VectorizedJob<A_T, DataType, Arch> m_src;
@@ -165,25 +165,96 @@ inline VectorizedJob<BinaryExpr<OP, A_T, B_T, DataType, EType>, DataType, Arch> 
 template<typename LeftValue, typename E, int Dims, typename DataType, vectorization::VecArch Arch>
 MGLORIA_INLINE_NORMAL void ExecuteVectorizedJob(Tensor<CPU, Dims, DataType> _dst,
                                                 const VectorizedJob<E, DataType, Arch>& plan) {
-  Tensor<CPU, 2, DataType> dst = _dst.FlatTo2D();
-  const index_t xlen = vectorization::FloorAlign<DataType, Arch>(dst.size(1));
+  Tensor<CPU, 2, DataType> dst = _dst.Flatten2D();
+  const index_t xlen = vectorization::FloorAlign<Arch, DataType>(dst.size(1));
   const size_t vec_size = vectorization::Vectorized<DataType, Arch>::num;
 #pragma omp parallel for
   for (openmp_index_t y = 0; y < dst.size(0); ++y) {
     // This pat is can be vectorized.
     for (index_t x = 0; x < xlen; x += vec_size) {
-      vectorization::VectorizedSaver<LeftValue, DataType, Arch>::Save(&dst[y][x],
-                                                                      plan.EvalVec(y, x));
+      vectorization::VectorizedSaver<LeftValue, DataType, Arch>::Do(&dst[y][x], plan.EvalVec(y, x));
     }
     // The left can not be vectorized.
-    for (index_t x = xlen; x < dst.size(1); ++x) { LeftValue::Save(dst[y][x], plan.Eval(y, x)); }
+    for (index_t x = xlen; x < dst.size(1); ++x) { LeftValue::Do(dst[y][x], plan.Eval(y, x)); }
   }
 }
 }  // namespace expr
 
 // ############################### Below for Vectorization Enable check. #####################
+template<typename E, vectorization::VecArch Arch>
+struct VecCheck {
+  static const bool m_Enable = MGLORIA_VECTORIZATION_FALSE;
+};
+
+template<vectorization::VecArch Arch>
+struct VecCheck<float, Arch> {
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
+};
+
+template<vectorization::VecArch Arch>
+struct VecCheck<double, Arch> {
+  static const bool m_Enable = MGLORIA_VECTORIZATION_TRUE;
+};
+
+template<typename DataType, vectorization::VecArch Arch>
+struct VecCheck<expr::ScalarExpr<DataType>, Arch> {
+  static const bool m_Enable = VecCheck<DataType, Arch>::m_Enable;
+};
+
+template<int Dims, typename DataType, vectorization::VecArch Arch>
+struct VecCheck<Tensor<CPU, Dims, DataType>, Arch> {
+  static const bool m_Enable = VecCheck<DataType, Arch>::m_Enable;
+};
+
+template<typename OP, typename A_T, typename DataType, expr::exprType EType,
+         vectorization::VecArch Arch>
+struct VecCheck<expr::UnaryExpr<OP, A_T, DataType, EType>, Arch> {
+  static const bool m_Enable =
+      VecCheck<A_T, Arch>::m_Enable && vectorization::VectorizedOP<OP, DataType, Arch>::m_Enable;
+};
+
+template<typename OP, typename A_T, typename B_T, typename DataType, expr::exprType EType,
+         vectorization::VecArch Arch>
+struct VecCheck<expr::BinaryExpr<OP, A_T, B_T, DataType, EType>, Arch> {
+  static const bool m_Enable = vectorization::VectorizedOP<OP, DataType, Arch>::m_Enable
+                               && VecCheck<A_T, Arch>::m_Enable && VecCheck<B_T, Arch>::m_Enable;
+};
 
 // ############################### Below for check Data is ok for Vec ########################
+template<int Dims, typename E, vectorization::VecArch Arch>
+struct VecDataAlignCheck {
+  inline static bool _check(const E& exp) { return false; }
+};
+
+template<int Dims, typename DataType, vectorization::VecArch Arch>
+struct VecDataAlignCheck<Dims, expr::ScalarExpr<DataType>, Arch> {
+  inline static bool _check(const expr::ScalarExpr<DataType>& exp) { return true; }
+};
+
+template<int Dims, typename DataType, vectorization::VecArch Arch>
+struct VecDataAlignCheck<Dims, Tensor<CPU, Dims, DataType>, Arch> {
+  inline static bool _check(const Tensor<CPU, Dims, DataType>& t) {
+    return vectorization::NotAlign<Arch>(t.__data_ptr)
+           && vectorization::NotAlign<Arch>(t.m_Stride_ * sizeof(DataType));
+  }
+};
+
+template<int Dims, typename OP, typename A_T, typename DataType, expr::exprType EType,
+         vectorization::VecArch Arch>
+struct VecDataAlignCheck<Dims, expr::UnaryExpr<OP, A_T, DataType, EType>, Arch> {
+  inline static bool _check(const expr::UnaryExpr<OP, A_T, DataType, EType>& t) {
+    return VecDataAlignCheck<Dims, A_T, Arch>::_check(t.m_entity);
+  }
+};
+
+template<int Dims, typename OP, typename A_T, typename B_T, typename DataType, expr::exprType EType,
+         vectorization::VecArch Arch>
+struct VecDataAlignCheck<Dims, expr::BinaryExpr<OP, A_T, B_T, DataType, EType>, Arch> {
+  inline static bool _check(const expr::BinaryExpr<OP, A_T, B_T, DataType, EType>& t) {
+    return VecDataAlignCheck<Dims, A_T, Arch>::_check(t.m_lhs)
+           && VecDataAlignCheck<Dims, B_T, Arch>::_check(t.m_rhs);
+  }
+};
 
 }  // namespace mgloria
 
