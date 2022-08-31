@@ -50,8 +50,8 @@ struct ImplicitGemmExpr
     Shape<2> __tmp_shape_lhs__ = __runtime_shape_check<2, LExpr>::_check(m_lhs);
     Shape<2> __tmp_shape_rhs__ = __runtime_shape_check<2, RExpr>::_check(m_rhs);
     CHECK_EQUAL(__tmp_shape_lhs__[1], __tmp_shape_rhs__[0]);
-    m_out_shape = makeShape2d(m_lhs[0], m_rhs[1]);
-    m_internal_size = m_lhs[1];
+    m_out_shape = makeShape2d(__tmp_shape_lhs__[0], __tmp_shape_rhs__[1]);
+    m_internal_size = __tmp_shape_lhs__[1];
   }
 
   const LExpr& m_lhs;
@@ -79,12 +79,12 @@ struct Job<ImplicitGemmExpr<LExpr, RExpr, DataType>, DataType> {
         m_rhs(e.m_rhs),
         m_internal_size(e.m_internal_size),
         m_internal_size_floor_aligned(
-            vectorization::FloorAlign<DataType, MGLORIA_VECTORIZATION_ARCH>(e.m_internal_size)) {}
+            vectorization::FloorAlign<MGLORIA_VECTORIZATION_ARCH, DataType>(e.m_internal_size)) {}
   MGLORIA_INLINE_NORMAL DataType Eval(index_t y, index_t x) const {
     using namespace vectorization;
     Vectorized<DataType> __vec__ = Vectorized<DataType>::Fill(0);
 
-    const size_t __vec_size__ = Vectorized<DataType>::size;
+    const size_t __vec_size__ = Vectorized<DataType>::num;
     DataType __lhs__[__vec_size__], __rhs__[__vec_size__];
 
     for (index_t i = 0; i < m_internal_size_floor_aligned; i += __vec_size__) {

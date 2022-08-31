@@ -248,7 +248,7 @@ class Tensor : public TRValue<Tensor<Device, Dims, DataType>, Device, Dims, Data
    *            Tensor<CPU, 3> B = A[0];
    *            Tensor<CPU, 2> C = B[0]; // Same as A[0][0];
    */
-  MGLORIA_INLINE_NORMAL Tensor<Device, Dims - 1, DataType> operator[](index_t idx) {
+  MGLORIA_INLINE_NORMAL Tensor<Device, Dims - 1, DataType> operator[](index_t idx) const {
     return Tensor<Device, Dims - 1, DataType>(__data_ptr + SubElementNum<1>() * idx,
                                               m_Shape.CudaShape(), m_Stride_, m_Stream);
   }
