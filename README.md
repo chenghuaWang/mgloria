@@ -1,6 +1,6 @@
 MGloria: Matrix and Parameter server for Gloria framework
 ======
-This lib is for practicing purpose and still fighting with bugs
+This lib is for practicing purpose and I'm still fighting with bugs
 
 This mgloria is a head only lib focus on Matrix and parameter server. For Practicing purpose. This lib is heavily depends on the expression template. MKL is the backend of CPU-Tensor, and CUDA/CUDNN is for GPU-Tensor. Doxygen style comment is used for doc.
 
@@ -16,7 +16,22 @@ A = B + C;
 std::cout << A;
 ```
 
-The Matrix engine will first interpret your formula to a expression tree. Then this tree will be passed to `Job` abstraction, the `Job` will finally decide which device should the operations run on, and what kind of optimization should be made.
+The Matrix engine will first interpret your formula to an expression tree. Then, this tree will be passed to `Job` abstraction, the `Job` will finally decide which device should the operations run on, and what kind of optimization should be made.
+
+## How to define OPs
+Let me use ReLU as an example.
+
+```c++
+struct ReLU {
+MGLORIA_INLINE_NORMAL static float Do(float t) {
+    if (t > 0.f) return t;
+    return 0.f;
+}
+};
+// A is a Tensor.
+A = expr::Func<ReLU>(A);
+```
+All operation should be defined as a struct. And this struct need has a function named `Do`, The function can be designed for Unary, Binary and Ternary expressions.
 
 ## On the route
 - [ ] [ ALL ] The Print function for Aligned Data is Buggy.
