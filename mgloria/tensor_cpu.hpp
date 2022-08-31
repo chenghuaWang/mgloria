@@ -60,7 +60,7 @@ MGLORIA_INLINE_NORMAL std::ostream& operator<<(std::ostream& os,
   for (index_t _r = 0; _r < end_r; ++_r) {
     for (index_t _c = 0; _c < end_c; ++_c) {
       os << std::setiosflags(std::ios::scientific | std::ios::showpos | std::ios::right)
-         << T.__data_ptr[_r * __tmp_shape__[0] + _c] << ", ";
+         << T.__data_ptr[_r * T.m_Stride_ + _c] << ", ";
     }
     if (reduced_c) { os << "..."; }
     os << '\n';
