@@ -39,9 +39,8 @@ MGLORIA_INLINE_NORMAL index_t CeilAlign(index_t size) {
 template<VecArch Arch, typename DataType>
 MGLORIA_INLINE_NORMAL index_t FloorAlign(index_t size) {
   const index_t aligned_bits = AlignBytes<Arch>::Default;
-  //   const index_t masked = (1 << aligned_bits) - 1;
   const index_t data_size = sizeof(DataType);
-  return ((size * data_size) >> aligned_bits) << aligned_bits;
+  return (((size * data_size) >> aligned_bits) << aligned_bits) / data_size;
 }
 
 /*!

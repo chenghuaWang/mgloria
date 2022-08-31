@@ -168,7 +168,9 @@ MGLORIA_INLINE_NORMAL void MapJob2Tensor(TRValue<R, CPU, Dims, DataType>* dst,
                                          const expr::Job<E, DataType>& plan) {
   Shape<2> __shape__ = expr::__runtime_shape_check<Dims, R>::_check(dst->Self()).Flatten2D();
   expr::Job<R, DataType> disJobs = expr::NewJob(dst->Self());
+#ifndef __CUDACC__
 #pragma omp parallel for
+#endif
   for (openmp_index_t y = 0; y < __shape__[0]; ++y) {
     for (index_t x = 0; x < __shape__[1]; ++x) {
       Saver::template Do<DataType>(disJobs.REval(y, x), plan.Eval(y, x));

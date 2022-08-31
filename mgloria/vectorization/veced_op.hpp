@@ -168,7 +168,16 @@ MGLORIA_INLINE_NORMAL void ExecuteVectorizedJob(Tensor<CPU, Dims, DataType> _dst
   Tensor<CPU, 2, DataType> dst = _dst.Flatten2D();
   const index_t xlen = vectorization::FloorAlign<Arch, DataType>(dst.size(1));
   const size_t vec_size = vectorization::Vectorized<DataType, Arch>::num;
+
+  // LOG << "------------------- DEBUG LLVM ---------------------------------\n";
+  // LOG << dst.m_Shape.str();
+  // LOG << xlen << std::endl;
+  // LOG << vec_size << std::endl;
+  // LOG << "------------------- DEBUG LLVM ---------------------------------\n";
+
+#ifndef __CUDACC__
 #pragma omp parallel for
+#endif
   for (openmp_index_t y = 0; y < dst.size(0); ++y) {
     // This pat is can be vectorized.
     for (index_t x = 0; x < xlen; x += vec_size) {

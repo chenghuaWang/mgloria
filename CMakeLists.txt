@@ -75,7 +75,9 @@ list(APPEND CMAKE_MODULE_PATH ${mgloria_cmake_dir})
 if(CPU_THREADING_RUNTIME STREQUAL "TBB")
 # TODO
 elseif(CPU_THREADING_RUNTIME STREQUAL "OMP")
-  add_definitions("-fopenmp=libiomp5") # =libiomp5
+  # if (NOT USE_CUDA)
+  # add_definitions("-fopenmp=libiomp5") # =libiomp5
+  # endif()
 elseif(CPU_THREADING_RUNTIME STREQUAL "SEQ")
 # TODO
 else()
@@ -83,9 +85,9 @@ else()
 endif()
 
 if (USE_CUDA)
-add_definitions("-xcuda")
-add_definitions("--cuda-path=/usr/local/cuda-11.7")
-add_definitions("--cuda-gpu-arch=sm_80")
+add_compile_options("-xcuda")
+add_compile_options("--cuda-path=/usr/local/cuda-11.7")
+add_compile_options("--cuda-gpu-arch=sm_80")
 endif()
 
 if(OF_FORCE_COLORED_DIAGNOSTICS)
