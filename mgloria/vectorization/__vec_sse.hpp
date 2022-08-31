@@ -164,25 +164,25 @@ MGLORIA_INLINE_CPU Vectorized<float, VecArch::SSE_Arch> operator/(
 MGLORIA_INLINE_CPU Vectorized<double, VecArch::SSE_Arch> operator+(
     const Vectorized<double, VecArch::SSE_Arch>& lhs,
     const Vectorized<double, VecArch::SSE_Arch>& rhs) {
-  return Vectorized<double, VecArch::SSE_Arch>(_mm_add_ps(lhs.m_data, rhs.m_data));
+  return Vectorized<double, VecArch::SSE_Arch>(_mm_add_pd(lhs.m_data, rhs.m_data));
 }
 
 MGLORIA_INLINE_CPU Vectorized<double, VecArch::SSE_Arch> operator-(
     const Vectorized<double, VecArch::SSE_Arch>& lhs,
     const Vectorized<double, VecArch::SSE_Arch>& rhs) {
-  return Vectorized<double, VecArch::SSE_Arch>(_mm_sub_ps(lhs.m_data, rhs.m_data));
+  return Vectorized<double, VecArch::SSE_Arch>(_mm_sub_pd(lhs.m_data, rhs.m_data));
 }
 
 MGLORIA_INLINE_CPU Vectorized<double, VecArch::SSE_Arch> operator*(
     const Vectorized<double, VecArch::SSE_Arch>& lhs,
     const Vectorized<double, VecArch::SSE_Arch>& rhs) {
-  return Vectorized<double, VecArch::SSE_Arch>(_mm_mul_ps(lhs.m_data, rhs.m_data));
+  return Vectorized<double, VecArch::SSE_Arch>(_mm_mul_pd(lhs.m_data, rhs.m_data));
 }
 
 MGLORIA_INLINE_CPU Vectorized<double, VecArch::SSE_Arch> operator/(
     const Vectorized<double, VecArch::SSE_Arch>& lhs,
     const Vectorized<double, VecArch::SSE_Arch>& rhs) {
-  return Vectorized<double, VecArch::SSE_Arch>(_mm_div_ps(lhs.m_data, rhs.m_data));
+  return Vectorized<double, VecArch::SSE_Arch>(_mm_div_pd(lhs.m_data, rhs.m_data));
 }
 
 }  // namespace vectorization

@@ -62,8 +62,10 @@ MGLORIA_INLINE_NORMAL std::ostream& operator<<(std::ostream& os,
       os << std::setiosflags(std::ios::scientific | std::ios::showpos | std::ios::right)
          << T.__data_ptr[_r * __tmp_shape__[0] + _c] << ", ";
     }
+    if (reduced_c) { os << "..."; }
     os << '\n';
   }
+  if (reduced_r) { os << "..."; }
   os << "]\n";
   os << std::resetiosflags(std::ios::scientific | std::ios::showpos | std::ios::right);
   return os;

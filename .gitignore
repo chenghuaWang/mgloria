@@ -7,4 +7,5 @@ bin/
 tmp/
 .cache/
 script/git_push.sh
+script/clang_priority_change.sh
 .VSCodeCounter/

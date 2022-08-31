@@ -73,11 +73,11 @@ list(APPEND CMAKE_MODULE_PATH ${mgloria_cmake_dir}/third_party)
 list(APPEND CMAKE_MODULE_PATH ${mgloria_cmake_dir})
 
 if(CPU_THREADING_RUNTIME STREQUAL "TBB")
-  add_definitions(-DOF_CPU_THREADING_RUNTIME=OF_RUNTIME_TBB)
+# TODO
 elseif(CPU_THREADING_RUNTIME STREQUAL "OMP")
-  add_definitions(-DOF_CPU_THREADING_RUNTIME=OF_RUNTIME_OMP)
+  add_definitions("-fopenmp=libiomp5") # =libiomp5
 elseif(CPU_THREADING_RUNTIME STREQUAL "SEQ")
-  add_definitions(-DOF_CPU_THREADING_RUNTIME=OF_RUNTIME_SEQ)
+# TODO
 else()
   message(FATAL_ERROR "CPU_THREADING_RUNTIME must be one of: TBB, OMP, SEQ")
 endif()
