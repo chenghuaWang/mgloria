@@ -65,7 +65,7 @@ struct Stream<GPU> {
     if (m_BlasHandle_ownership == HandleStatus::own) {
       cublasStatus_t err = cublasDestroy(m_BlasHandle);
       m_BlasHandle_ownership = HandleStatus::no;
-      CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS);
+      CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS, " Failed to free cublas Handle");
     }
   }
 
@@ -73,9 +73,9 @@ struct Stream<GPU> {
     FreeBlasHandle();
     cublasStatus_t err = cublasCreate(&m_BlasHandle);
     m_BlasHandle_ownership = HandleStatus::own;
-    CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS);
+    CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS, " Failed to create cublas Handle.");
     err = cublasSetStream(m_BlasHandle, m_Stream);
-    CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS);
+    CHECK_EQUAL(err, CUBLAS_STATUS_SUCCESS, " Failed to set cublas Stream.");
   }
 
   MGLORIA_INLINE_NORMAL static cublasHandle_t& GetBlasHandle(Stream<GPU>* s) {

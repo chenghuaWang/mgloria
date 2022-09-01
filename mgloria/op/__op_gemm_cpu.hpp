@@ -32,10 +32,11 @@ template<int Dims, typename LExpr, typename RExpr, typename DataType>
 struct __runtime_shape_check<Dims, ImplicitGemmExpr<LExpr, RExpr, DataType>> {
   MGLORIA_INLINE_NORMAL static Shape<Dims> _check(
       const ImplicitGemmExpr<LExpr, RExpr, DataType>& t) {
-    CHECK_EQUAL(Dims, 2);
+    CHECK_EQUAL(Dims, 2, " out of Bound for dim=", 2);
     Shape<Dims> __tmp_shape_lhs__ = __runtime_shape_check<Dims, LExpr>::_check(t.m_lhs);
     Shape<Dims> __tmp_shape_rhs__ = __runtime_shape_check<Dims, RExpr>::_check(t.m_rhs);
-    CHECK_EQUAL(__tmp_shape_lhs__[1], __tmp_shape_rhs__[0]);
+    CHECK_EQUAL(__tmp_shape_lhs__[1], __tmp_shape_rhs__[0], " Shape_Left[1]=", __tmp_shape_lhs__[1],
+                " Shape_Right[0]=", __tmp_shape_rhs__[0]);
     return t.m_out_shape;
   }
 };
@@ -49,7 +50,8 @@ struct ImplicitGemmExpr
   ImplicitGemmExpr(const LExpr& lhs, const RExpr& rhs) : m_lhs(lhs), m_rhs(rhs) {
     Shape<2> __tmp_shape_lhs__ = __runtime_shape_check<2, LExpr>::_check(m_lhs);
     Shape<2> __tmp_shape_rhs__ = __runtime_shape_check<2, RExpr>::_check(m_rhs);
-    CHECK_EQUAL(__tmp_shape_lhs__[1], __tmp_shape_rhs__[0]);
+    CHECK_EQUAL(__tmp_shape_lhs__[1], __tmp_shape_rhs__[0], " Shape_Left[1]=", __tmp_shape_lhs__[1],
+                " Shape_Right[0]=", __tmp_shape_rhs__[0]);
     m_out_shape = makeShape2d(__tmp_shape_lhs__[0], __tmp_shape_rhs__[1]);
     m_internal_size = __tmp_shape_lhs__[1];
   }

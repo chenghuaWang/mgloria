@@ -56,12 +56,10 @@ MGLORIA_INLINE_NORMAL std::ostream& operator<<(std::ostream& os,
     reduced_c = true;
     end_c = MGLORIA_MAX_SHOW_LENGTH;
   }
+  os << std::setiosflags(std::ios::scientific | std::ios::showpos | std::ios::right);
 #pragma unroll
   for (index_t _r = 0; _r < end_r; ++_r) {
-    for (index_t _c = 0; _c < end_c; ++_c) {
-      os << std::setiosflags(std::ios::scientific | std::ios::showpos | std::ios::right)
-         << T.__data_ptr[_r * T.m_Stride_ + _c] << ", ";
-    }
+    for (index_t _c = 0; _c < end_c; ++_c) { os << T.__data_ptr[_r * T.m_Stride_ + _c] << ", "; }
     if (reduced_c) { os << "..."; }
     os << '\n';
   }
@@ -110,7 +108,7 @@ MGLORIA_INLINE_NORMAL void __HostFree__<CPU>(void* ptr) {
 template<typename xpu, int Dims, typename DataType>
 MGLORIA_INLINE_NORMAL void HostMalloc(Tensor<CPU, Dims, DataType>* T) {
   T->m_Stride_ = T->size(Dims - 1);
-  CHECK_EQUAL(T->IsContiguous(), true);
+  CHECK_EQUAL(T->IsContiguous(), true, " Tensor's Data is Not Contiguous.");
   void* ptr = __HostMalloc__<xpu>(T->AllElementNum() * sizeof(DataType));
   T->__data_ptr = reinterpret_cast<DataType*>(ptr);
 }
@@ -205,6 +203,12 @@ struct MapExpr2Tensor_CPU<true, SV, Tensor<CPU, Dims, DataType>, Dims, DataType,
 template<typename Saver, typename R, int Dims, typename DType, typename E, int etype>
 MGLORIA_INLINE_NORMAL void MapExpr2Tensor(TRValue<R, CPU, Dims, DType>* dst,
                                           const expr::Expression<E, DType, etype>& exp) {
+#if MGLORIA_RUNTIME_SHAPE_CHECK == 1
+  Shape<Dims> __shape_expr__ = expr::__runtime_shape_check<Dims, E>::_check(exp.Self());
+  Shape<Dims> __shape_left__ = expr::__runtime_shape_check<Dims, R>::_check(dst->Self());
+#endif
+  LOG_CHECK(__shape_expr__ == __shape_left__ || __shape_expr__[0] == 0,
+            "\nShape_Expr=", __shape_expr__.str(), "Shape_Left=", __shape_left__.str());
   MapExpr2Tensor_CPU<VecCheck<E, MGLORIA_VECTORIZATION_ARCH>::m_Enable, Saver, R, Dims, DType, E,
                      etype>::Do(dst->SelfPtr(), exp);
 }

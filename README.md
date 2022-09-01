@@ -35,7 +35,8 @@ All operation should be defined as a struct. And this struct need has a function
 
 ## On the route
 - [x] [ ALL ] The Print function for Aligned Data is Buggy.
-- [ ] [ ALL ] The Shape Check Template is Buggy.
+- [x] [ ALL ] The Shape Check Template is Buggy.
+- [x] [ ALL ] Make LOG Check more friendly.
 - [ ] [ ALL ] OpenMP for CPU-Tensor to use. Need Test and Config.
 - [ ] [ OP ] Implicit GEMM For CPU-Tensor. Need to change and Optimize.
 - [ ] [ OP ] Basic ops for neural net need to implemented.

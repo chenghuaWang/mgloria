@@ -41,8 +41,7 @@ template<int32_t Dims, typename OriDataType, typename DisDataType, typename A_T,
 struct __runtime_shape_check<Dims, TypeCastExpr<OriDataType, DisDataType, A_T, EType>> {
   MGLORIA_INLINE_NORMAL static Shape<Dims> _check(
       const TypeCastExpr<OriDataType, DisDataType, A_T, EType>& e) {
-    return __runtime_shape_check<Dims, TypeCastExpr<OriDataType, DisDataType, A_T, EType>>::_check(
-        e.m_expr);
+    return __runtime_shape_check<Dims, A_T>::_check(e.m_expr);
   }
 };
 
@@ -74,7 +73,7 @@ struct __runtime_shape_check<Dims, Tensor<DeviceType, Dims, DataType>> {
 template<int32_t Dims, typename OP, typename A_T, typename DataType, exprType EType>
 struct __runtime_shape_check<Dims, UnaryExpr<OP, A_T, DataType, EType>> {
   MGLORIA_INLINE_NORMAL static Shape<Dims> _check(const UnaryExpr<OP, A_T, DataType, EType>& e) {
-    return __runtime_shape_check<Dims, UnaryExpr<OP, A_T, DataType, EType>>::_check(e.m_entity);
+    return __runtime_shape_check<Dims, A_T>::_check(e.m_entity);
   }
 };
 
@@ -95,7 +94,8 @@ struct __runtime_shape_check<Dims, BinaryExpr<OP, A_T, B_T, DataType, EType>> {
       // __shape_rhs__ is scalar
       return __shape_lhs__;
     }
-    CHECK_EQUAL(__shape_lhs__, __shape_rhs__);
+    CHECK_EQUAL(__shape_lhs__, __shape_rhs__, "\nShape_LHS=", __shape_lhs__.str(),
+                "Shape_RHS=", __shape_rhs__.str());
     return __shape_lhs__;
   }
 };
@@ -106,7 +106,7 @@ struct __runtime_shape_check<Dims, BinaryExpr<OP, A_T, B_T, DataType, EType>> {
 template<int32_t Dims, typename OP, typename A_T, typename B_T, typename C_T, typename DataType,
          exprType EType>
 struct __runtime_shape_check<Dims, TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>> {
-  MGLORIA_INLINE_NORMAL Shape<Dims> _check(
+  MGLORIA_INLINE_NORMAL static Shape<Dims> _check(
       const TernaryExpr<OP, A_T, B_T, C_T, DataType, EType>& e) {
     Shape<Dims> __shape_1__ = __runtime_shape_check<Dims, A_T>::_check(e.m_1);
     Shape<Dims> __shape_2__ = __runtime_shape_check<Dims, B_T>::_check(e.m_2);

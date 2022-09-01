@@ -60,7 +60,7 @@ MGLORIA_INLINE_NORMAL NO_TYPE_PTR MallocAlignedPitch(size_t* actual_mem, size_t 
   void* ans;
   int ret = posix_memalign(&ans, 1 << aligned_bits, pitch_mem * lines);
 #if MGLORIA_CHECK_NULL_MEM_PTR == 1
-  CHECK_EQUAL(ret, 0);
+  CHECK_EQUAL(ret, 0, " The posix_memalign failed.");
   if (ans == nullptr) {
     LOG_ERR << "CPU MAllocAlignedPitch Error! Want to allocate "
             << " lines=" << lines << ", line_cells=" << line_cells

@@ -54,6 +54,13 @@
 #define MGLORIA_USE_SSE 1
 #endif
 
+#define MGLORIA_ARRAY_BOUND_CHECK 0
+#define MGLORIA_CHECK_NULL_MEM_PTR 1
+#define MGLORIA_PAD_TO_ALIGN 1
+#define MGLORIA_RUNTIME_SHAPE_CHECK 1
+#define MGLORIA_RUNTIME_DEVICE_TYPE_CHECK 1
+#define MGLORIA_MAX_SHOW_LENGTH 8
+
 #if MGLORIA_USE_SSE == 1
 #define MGLORIA_VECTORIZATION_ARCH ::mgloria::vectorization::VecArch::SSE_Arch
 #else
@@ -145,6 +152,7 @@ class _log_stream {
     }
   }
 };
+
 #endif  // MGLORIA_GLOG == 0
 
 /*!
@@ -156,18 +164,34 @@ class _log_stream {
 #define LOG_DEBUG _log_stream::make_stream(__FILE__, __LINE__, _log_type::debug)
 #define LOG _log_stream::make_stream(__FILE__, __LINE__, _log_type::all)
 
+template<typename T>
+MGLORIA_INLINE_NORMAL std::ostream &operator,(std::ostream&out, const T&t) {
+  out << t;
+  return out;
+}
+
+MGLORIA_INLINE_NORMAL std::ostream &operator,(std::ostream&out, std::ostream&(*f)(std::ostream&)) {
+  out << f;
+  return out;
+}
+
 /*!
  *@brief CHECK if the condition is True.
  */
-#define LOG_CHECK(x) \
-  if (!(x)) { LOG_ERR << "Check [" << #x << "] Fail.\n"; }
-#define CHECK_LOWER_THAN(x, y) LOG_CHECK((x) < (y))
-#define CHECK_GREATER_THAN(x, y) LOG_CHECK((x) > (y))
-#define CHECK_EQUAL(x, y) LOG_CHECK((x) == (y))
-#define CHECK_LOWER_EQUAL(x, y) LOG_CHECK((x) <= (y))
-#define CHECK_GREATER_EQUAL(x, y) LOG_CHECK((x) >= (y))
-#define CHECK_NOT_EQUAL(x, y) LOG_CHECK((x) != (y))
-#define CHECK_NULL(x) LOG_CHECK((x) != NULL)
+#define LOG_CHECK(x, ...)                            \
+  if (!(x)) {                                        \
+    LOG_ERR << "Failed when testing " << #x << "\n"; \
+    std::cerr, __VA_ARGS__, std::endl;               \
+    std::exit(1);                                    \
+  }
+
+#define CHECK_LOWER_THAN(x, y, ...) LOG_CHECK((x) < (y), __VA_ARGS__)
+#define CHECK_GREATER_THAN(x, y, ...) LOG_CHECK((x) > (y), __VA_ARGS__)
+#define CHECK_EQUAL(x, y, ...) LOG_CHECK((x) == (y), __VA_ARGS__)
+#define CHECK_LOWER_EQUAL(x, y, ...) LOG_CHECK((x) <= (y), __VA_ARGS__)
+#define CHECK_GREATER_EQUAL(x, y, ...) LOG_CHECK((x) >= (y), __VA_ARGS__)
+#define CHECK_NOT_EQUAL(x, y, ...) LOG_CHECK((x) != (y), __VA_ARGS__)
+#define CHECK_NULL(x, ...) LOG_CHECK((x) != NULL, __VA_ARGS__)
 
 /*!
  *@brief Define the guard macro for CUDA Call. Also Error throw.
@@ -178,17 +202,10 @@ class _log_stream {
   {                                                                     \
     cudaError_t e = (func);                                             \
     if (e == cudaErrorCudartUnloading) { throw cudaGetErrorString(e); } \
-    LOG_CHECK(e == cudaSuccess);                                        \
+    LOG_CHECK(e == cudaSuccess, "CUDA Failed");                         \
   }
 
 #endif  // MGLORIA_USE_CUDA == 1
-
-#define MGLORIA_ARRAY_BOUND_CHECK 0
-#define MGLORIA_CHECK_NULL_MEM_PTR 1
-#define MGLORIA_PAD_TO_ALIGN 1
-#define MGLORIA_RUNTIME_SHAPE_CHECK 1
-#define MGLORIA_RUNTIME_DEVICE_TYPE_CHECK 1
-#define MGLORIA_MAX_SHOW_LENGTH 8
 
 template<typename DataType>
 MGLORIA_INLINE_XPU DataType MINLimit();

@@ -40,16 +40,16 @@ struct Shape {
   // ######################### operator overload ####################
   MGLORIA_INLINE_NORMAL index_t& operator[](index_t i) {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(i, dims);
-    CHECK_GREATER_EQUAL(i, 0);
+    CHECK_LOWER_THAN(i, dims, " ", i, "is out of Bound for dim=", dims);
+    CHECK_GREATER_EQUAL(i, 0, " ", i, "is out of Bound for dim=", dims);
 #endif
     return _shape[i];
   }
 
   MGLORIA_INLINE_NORMAL const index_t& operator[](index_t i) const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(i, dims);
-    CHECK_GREATER_EQUAL(i, 0);
+    CHECK_LOWER_THAN(i, dims, " ", i, "is out of Bound for dim=", dims);
+    CHECK_GREATER_EQUAL(i, 0, " ", i, "is out of Bound for dim=", dims);
 #endif
     return _shape[i];
   }
@@ -100,10 +100,10 @@ struct Shape {
    */
   MGLORIA_INLINE_NORMAL index_t SubSize(index_t start_dim, index_t end_dim) const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(start_dim, dims);
-    CHECK_GREATER_EQUAL(start_dim, 0);
-    CHECK_LOWER_THAN(end_dim, dims);
-    CHECK_GREATER_EQUAL(end_dim, 0);
+    CHECK_LOWER_THAN(start_dim, dims, " ", start_dim, "is out of Bound for dim=", dims);
+    CHECK_GREATER_EQUAL(start_dim, 0, " ", start_dim, "is out of Bound for dim=", dims);
+    CHECK_LOWER_THAN(end_dim, dims, " ", end_dim, "is out of Bound for dim=", dims);
+    CHECK_GREATER_EQUAL(end_dim, 0, " ", end_dim, "is out of Bound for dim=", dims);
 #endif
     index_t ans = 1;
 #pragma unroll
@@ -120,7 +120,7 @@ struct Shape {
   template<index_t s, index_t e>
   MGLORIA_INLINE_NORMAL Shape<e - s> Slice() const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_GREATER_THAN(e, s);
+    CHECK_GREATER_THAN(e, s, " ", e, " need to be lager then ", s);
 #endif
     Shape<e - s> ans;
 #pragma unroll

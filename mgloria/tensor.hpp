@@ -144,8 +144,8 @@ class Tensor : public TRValue<Tensor<Device, Dims, DataType>, Device, Dims, Data
   MGLORIA_INLINE_NORMAL int32_t SubElementNum() const {
     int32_t ans = m_Stride_;
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(start, Dims);
-    CHECK_GREATER_EQUAL(start, 0);
+    CHECK_LOWER_THAN(start, Dims, " ", start, " is out of Bound for dim=", Dims);
+    CHECK_GREATER_EQUAL(start, 0, " ", start, " is out of Bound for dim=", Dims);
 #endif
 #pragma unroll
     for (int32_t i = start; i < ms_Dimensions_in_use; ++i) { ans *= m_Shape[i]; }
@@ -366,16 +366,16 @@ class Tensor<Device, 1, DataType>
 
   MGLORIA_INLINE_NORMAL DataType& operator[](index_t idx) {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(idx, m_Shape[0]);
-    CHECK_GREATER_EQUAL(idx, 0);
+    CHECK_LOWER_THAN(idx, m_Shape[0], " ", idx, " is out of Bound for dim=", m_Shape[0]);
+    CHECK_GREATER_EQUAL(idx, 0, " ", idx, " is out of Bound for dim=", m_Shape[0]);
 #endif
     return __data_ptr[idx];
   }
 
   MGLORIA_INLINE_NORMAL const DataType& operator[](index_t idx) const {
 #if MGLORIA_ARRAY_BOUND_CHECK == 1
-    CHECK_LOWER_THAN(idx, m_Shape[0]);
-    CHECK_GREATER_EQUAL(idx, 0);
+    CHECK_LOWER_THAN(idx, m_Shape[0], " ", idx, " is out of Bound for dim=", m_shape[0]);
+    CHECK_GREATER_EQUAL(idx, 0, " ", idx, " is out of Bound for dim=", m_Shape[0]);
 #endif
     return __data_ptr[idx];
   }
