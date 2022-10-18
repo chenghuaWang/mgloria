@@ -47,7 +47,11 @@
 #endif
 
 #ifndef MGLORIA_USE_MKL
-#define MGLORIA_USE_MKL 1
+#define MGLORIA_USE_MKL 0
+#endif
+
+#ifndef MGLORIA_USE_BLAS
+#define MGLORIA_USE_BLAS 1
 #endif
 
 #ifndef MGLORIA_USE_SSE
@@ -75,6 +79,9 @@
 #include <mkl/mkl_vsl.h>
 #include <mkl/mkl_vsl_functions.h>
 #include <mkl/mkl_version.h>
+#endif
+#if MGLORIA_USE_BLAS
+#include <cblas.h>
 #endif
 #if MGLORIA_USE_CUDA == 1
 #include <cuda.h>
